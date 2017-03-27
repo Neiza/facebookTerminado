@@ -1,19 +1,40 @@
   var estado = document.getElementById("actualStatus");
   var postButton = document.getElementById("post");
+  var option = document.getElementsByTagName("option");
+  var tipoFriend = document.getElementsByTagName("option")[0];
+  var tipoPublic = document.getElementsByTagName("option")[1];
+  var allFriends = [];
+  var allPublic  = [];
 
-  if (estado.value.length<1){
-    postButton.disabled=true;
-    estado.addEventListener("keypress", function(){
-    postButton.disabled=false;;
-    });
+  var deleteButton = document.getElementById("borrar");
+
+
+
+  postButton.disabled =true;
+
+  var postear = function (e){
+    var codigoTecla = e.keyCode;
+    if(codigoTecla!=32 && codigoTecla!=13 ){
+      postButton.disabled = false;
+    }
+    else{
+      postButton.disabled = true;
+    }
   }
 
-
-  var typeOfcomment = document.getElementsByTagName("option");
+  estado.onkeypress = postear;
+/* if (estado.onkeypress.length<1){
+      postButton.disabled=true;
+      estado.addEventListener("keypress", function(){
+      postButton.disabled=false;
+    });
+  }*/
 
 
 /*  status.addEventListener("keypress",function(){
   postButton.disabled=false;})*/
+  var typeOfcomment = document.getElementsByTagName("option");
+
   window.addEventListener("load", function(){
 
   postButton.addEventListener("click", function(event){
@@ -22,7 +43,6 @@
     /*  printStatus.innerHTML+=status.value+"<br>";
       status.value="";*/
   function createPost(){
-
     var post = document.createElement("div");
     var texto= document.createElement("p");
     var buttonsContainer = document.createElement("div");
@@ -30,63 +50,60 @@
     var editButton = document.createElement("button");
 
     texto.innerHTML=estado.value;
-    estado.value="";
-
-    var expSpace = /\s/;
-
-    if (estado.value.length<1 ){
-      postButton.disabled=true;
-    }
-    
-
     post.appendChild(texto);
     buttonsContainer.appendChild(deleteButton);
     buttonsContainer.appendChild(editButton);
     divStatus.appendChild(post);
     divStatus.appendChild(buttonsContainer);
-    deleteButton.Id="borrar"
-    post.Id = "placeToPrint"
+    deleteButton.Id="borrar";
+    post.Id = "placeToPrint";
     deleteButton.innerHTML="Delete";
     editButton.innerHTML="Edit";
 
-
-
-
-    function createObjeto (){
-        this.status = estado.value;
-        this.type   = typeOfcomment[0].value;
+    function CreateObjeto (status){
+        this.status = status;
     }
-        var allFriends = [];
-        var allPublic  = [];
-        if (document.getElementsByTagName("option")[0]){
-        var comment = new createObjeto();
-        allFriends.push(comment);
-        }
-    /*    else if (document.getElementsByTagName("option")[1]){
-        var comment = new createObjeto(document.getElementById('actualStatus').value, document.getElementsByTagName("option")[1].value);
-        allFriends.push(comment);
 
-      }*/
+    var js = new CreateObjeto(estado.value);
+
+         if (tipoFriend.selected){
+            allFriends.push(estado.value);
+            }
+            else if (tipoPublic.selected){
+
+            allPublic.push(estado.value)
+         }
+
+
+    estado.value="";
+
+    postButton.disabled = true;
+
+    var postear = function (e){
+      var codigoTecla = e.keyCode;
+      if(codigoTecla!=32 && codigoTecla!=13){
+        postButton.disabled = false;
+      }
+      else{
+        postButton.disabled = true;
+      }
+    }
+
+    estado.onkeypress = postear;
+
+
+
   }
   createPost();
 
-/*  var deleteButton = document.getElementById("borrar");
-  deleteButton.addEventListener("click", function(event){
-    event.preventDefault();
-    function j (){
-      var borrar = document.getElementById("placeToPrint").value;
-      borrar="";
-    }*/
-  })
+
+
+  });
 
 
 
 
-
-  })
-
-
-
+})
 
   /* var deleteButton = document.createElement("button");
     deleteButton.addEventListener("click", function(event){
