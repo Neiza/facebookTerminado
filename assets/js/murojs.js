@@ -6,8 +6,6 @@
   var allFriends = [];
   var allPublic  = [];
 
-  var deleteButton = document.getElementById("borrar");
-
 
 
   postButton.disabled =true;
@@ -42,55 +40,92 @@
     //  var status = document.getElementById('actualStatus');
     /*  printStatus.innerHTML+=status.value+"<br>";
       status.value="";*/
-  function createPost(){
-    var post = document.createElement("div");
-    var texto= document.createElement("p");
-    var buttonsContainer = document.createElement("div");
-    var deleteButton = document.createElement("button");
-    var editButton = document.createElement("button");
+    function createPost(){
+      var post = document.createElement("div");
+      var texto= document.createElement("p");
+      var buttonsContainer = document.createElement("div");
+      var deleteButton = document.createElement("button");
+      var editButton = document.createElement("button");
+      var publicacion = document.createTextNode(estado.value);
 
-    texto.innerHTML=estado.value;
-    post.appendChild(texto);
-    buttonsContainer.appendChild(deleteButton);
-    buttonsContainer.appendChild(editButton);
-    divStatus.appendChild(post);
-    divStatus.appendChild(buttonsContainer);
-    deleteButton.Id="borrar";
-    post.Id = "placeToPrint";
-    deleteButton.innerHTML="Delete";
-    editButton.innerHTML="Edit";
+       // texto.innerHTML=estado.value;
+      post.appendChild(texto);
+      texto.appendChild(publicacion);
+      buttonsContainer.appendChild(deleteButton);
+      buttonsContainer.appendChild(editButton);
+      divStatus.appendChild(post);
+      divStatus.appendChild(buttonsContainer);
+      deleteButton.Id="borrar";
+      post.Id = "placeToPrint";
+      deleteButton.innerHTML="Delete";
+      editButton.innerHTML="Edit";
 
-    function CreateObjeto (status){
-        this.status = status;
-    }
+      function CreateObjeto (status){
+          this.status = status;
+      }
 
-    var js = new CreateObjeto(estado.value);
+      var js = new CreateObjeto(estado.value);
 
-         if (tipoFriend.selected){
-            allFriends.push(estado.value);
+           if (tipoFriend.selected){
+              allFriends.push(estado.value);
+              }
+              else if (tipoPublic.selected){
+
+              allPublic.push(estado.value)
+           }
+
+
+      estado.value="";
+
+      postButton.disabled = true;
+
+      var postear = function (e){
+        var codigoTecla = e.keyCode;
+        if(codigoTecla!=32 && codigoTecla!=13){
+          postButton.disabled = false;
+        }
+        else{
+          postButton.disabled = true;
+        }
+      }
+
+      estado.onkeypress = postear;
+
+      deleteButton.addEventListener("click", function(event){
+          event.preventDefault();
+            function del(){
+                var confirm = window.confirm("Estas seguro de eliminar?");
+                if (confirm == true){
+                    texto.removeChild(publicacion);
+                    buttonsContainer.removeChild(deleteButton);
+                    buttonsContainer.removeChild(editButton);
+                    // falta elimiar el comentario de la matriz de friends y pubic
+                }
+
             }
-            else if (tipoPublic.selected){
-
-            allPublic.push(estado.value)
-         }
+            del();
+      });
 
 
-    estado.value="";
+      editButton.addEventListener("click", function(event){
+          event.preventDefault();
+              function edit(){
+                  var textArea = document.createElement("textarea");
+                  var save = document.createElement("button");
+                  post.appendChild(textArea);
+                  buttonsContainer.appendChild(save)
+                  save.innerHTML = "Save"
 
-    postButton.disabled = true;
+                  textArea.innerHTML =publicacion.data;
+                  textArea.focus();
 
-    var postear = function (e){
-      var codigoTecla = e.keyCode;
-      if(codigoTecla!=32 && codigoTecla!=13){
-        postButton.disabled = false;
-      }
-      else{
-        postButton.disabled = true;
-      }
-    }
+                  texto.removeChild(publicacion);
+                  buttonsContainer.removeChild(deleteButton);
+                  buttonsContainer.removeChild(editButton);
 
-    estado.onkeypress = postear;
-
+            }
+            edit();
+    });
 
 
   }
